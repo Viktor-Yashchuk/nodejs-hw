@@ -11,17 +11,21 @@ export const getAllNotesSchema = {
   })
 };
 
+const objectIdValidator = (value, helpers) => {
+  return !isValidObjectId(value) ? helpers.message('Invalid id format') : value;
+};
+
 export const noteIdSchema = {
   [Segments.PARAMS]: Joi.object({
-    noteId: Joi.string().custom(isValidObjectId)
+    noteId: Joi.string().custom(objectIdValidator).required(),
   })
 };
 
 export const createNoteSchema = {
   [Segments.BODY]: Joi.object({
     title: Joi.string().min(1).required(),
-    content: Joi.string(),
-    tag: Joi.valid(...TAGS),
+    content: Joi.string().allow(''),
+    tag: Joi.valid(...TAGS).optional(),
   }).min(1),
 };
 
@@ -31,7 +35,7 @@ export const updateNoteSchema = {
   }),
   [Segments.BODY]: Joi.object({
     title: Joi.string().min(1),
-    content: Joi.string(),
-    tag: Joi.valid(...TAGS),
-  }),
+    content: Joi.string().allow(''),
+    tag: Joi.valid(...TAGS).optional(),
+  }).min(1),
 };
