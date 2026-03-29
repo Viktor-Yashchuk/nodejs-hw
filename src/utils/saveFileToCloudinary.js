@@ -13,6 +13,9 @@ export async function saveFileToCloudinary(buffer) {
     const uploadStream = cloudinary.uploader.upload_stream({
       folder: 'notes-app/avatars',
       resource_type: 'image',
+      overwrite: true,
+      unique_filename: false,
+      use_filename: false,
     },
       (err, result) => (err ? reject(err) : resolve(result)),
     );
